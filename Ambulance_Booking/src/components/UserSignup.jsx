@@ -78,8 +78,8 @@ const UserSignup = () => {
             emergencyName,
             emergencyNum,
             location: {
-              latitude: String(location.latitude || ""), // Ensure it's a string
-              longitude: String(location.longitude || ""), // Ensure it's a string
+              latitude: String(location.latitude || ""),
+              longitude: String(location.longitude || ""),
               address: location.address,
               city: location.city,
               state: location.state,
