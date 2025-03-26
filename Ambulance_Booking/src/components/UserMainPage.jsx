@@ -11,7 +11,7 @@ const UserMainPage = () => {
             <input
                 id="pass"
                 type={showPassword ? "text" : "password"}
-                value={password}
+                value={password}  
                 onChange={(e) => setPassword(e.target.value)}
                 className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
                 placeholder="Enter Your Password"
