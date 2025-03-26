@@ -29,7 +29,6 @@ const UserSignup = () => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [otp, setOtp] = useState("");
 
   /* user healthcare variables*/
   const [bloodGroup, setBloodGroup] = useState("");
@@ -79,7 +78,7 @@ const UserSignup = () => {
             emergencyNum,
             location: {
               latitude: String(location.latitude || ""),
-              longitude: String(location.longitude || ""),
+              longitude: String(location.longitude || ""), 
               address: location.address,
               city: location.city,
               state: location.state,
@@ -328,20 +327,6 @@ const UserSignup = () => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
                   placeholder="Confirm Password"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="otp" className="sr-only">
-                  OTP verification
-                </label>
-                <input
-                  id="otp"
-                  type="number"
-                  value={otp}
-                  placeholder="Enter the OTP"
-                  onChange={(e) => setOtp(e.target.value)}
-                  className="px-4 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
                   required
                 />
               </div>

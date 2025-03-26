@@ -1,6 +1,7 @@
 const User = require('../Models/User_Cred');
 const bcrypt = require('bcrypt'); 
 const jwttoken = require('jsonwebtoken');
+const otpStore = new Map(); 
 
 const user_signup = async (req, res) => { 
     try {
@@ -9,6 +10,7 @@ const user_signup = async (req, res) => {
             password, confirmPassword, otp, bloodGroup, prevMedic, alergies,
             emergencyName, emergencyNum, location
         } = req.body;
+
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(409).json({

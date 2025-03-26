@@ -84,7 +84,7 @@ const UserLogin = () => {
             <input
               type="text"
               className="px-4 py-3 w-full border-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
-              placeholder="Enter Your Username"
+              placeholder="Enter Your Username or Email"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
               required
