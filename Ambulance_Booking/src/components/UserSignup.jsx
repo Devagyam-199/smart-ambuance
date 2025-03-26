@@ -77,7 +77,14 @@ const UserSignup = () => {
             alergies,
             emergencyName,
             emergencyNum,
-            location,
+            location: {
+              latitude: String(location.latitude || ""), // Ensure it's a string
+              longitude: String(location.longitude || ""), // Ensure it's a string
+              address: location.address,
+              city: location.city,
+              state: location.state,
+              country: location.country,
+            },
           }),
         }
       );
@@ -94,7 +101,7 @@ const UserSignup = () => {
         }, 1000);
       } else {
         console.error("Sign-Up Failed:", data);
-        alert(data.error || "Invalid credentials");
+        alert(data.error);
       }
     } catch (error) {
       console.error("Error during Sign-Up:", error);
