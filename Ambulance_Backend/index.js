@@ -14,7 +14,7 @@ app.get(`/ping`,(req,res)=>(
 
 app.use(bodyParser.json())
 app.use(cors({
-    origin: "https://resqride.netlify.app/",  // Allow only your frontend
+    origin: "https://resqride.netlify.app",  // Allow only your frontend
     methods: "GET,POST,PUT,DELETE",
     allowedHeaders: "Content-Type,Authorization"
 }));
