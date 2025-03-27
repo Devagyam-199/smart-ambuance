@@ -13,7 +13,11 @@ app.get(`/ping`,(req,res)=>(
 ))
 
 app.use(bodyParser.json())
-app.use(cors())
+app.use(cors({
+    origin: "https://resqride.netlify.app/",  // Allow only your frontend
+    methods: "GET,POST,PUT,DELETE",
+    allowedHeaders: "Content-Type,Authorization"
+}));
 
 app.use('/user_auth', User_Auth_Router)
 
