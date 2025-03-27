@@ -7,7 +7,7 @@ const user_signup = async (req, res) => {
     try {
         const {
             fullName, email, number, dob, gender, userName,
-            password, confirmPassword, otp, bloodGroup, prevMedic, alergies,
+            password, confirmPassword, otp, bloodGroup, prevMedic, allergies,
             emergencyName, emergencyNum, location
         } = req.body;
 
@@ -29,7 +29,7 @@ const user_signup = async (req, res) => {
         const newUser = new User({
             fullName, email, number, dob, gender, userName,
             password: hashedPassword,
-            otp, bloodGroup, prevMedic, alergies, emergencyName, emergencyNum, location
+            otp, bloodGroup, prevMedic, allergies, emergencyName, emergencyNum, location
         });
 
         await newUser.save();

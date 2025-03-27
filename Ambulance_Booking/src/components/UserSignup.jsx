@@ -33,7 +33,7 @@ const UserSignup = () => {
   /* user healthcare variables*/
   const [bloodGroup, setBloodGroup] = useState("");
   const [prevMedic, setPrevMedic] = useState("");
-  const [alergies, setAlergies] = useState("");
+  const [allergies, setAllergies] = useState("");
   const [emergencyName, setEmergencyName] = useState("");
   const [emergencyNum, setEmergencyNum] = useState("");
 
@@ -73,12 +73,12 @@ const UserSignup = () => {
             otp,
             bloodGroup,
             prevMedic,
-            alergies,
+            allergies,
             emergencyName,
             emergencyNum,
             location: {
               latitude: String(location.latitude || ""),
-              longitude: String(location.longitude || ""), 
+              longitude: String(location.longitude || ""),
               address: location.address,
               city: location.city,
               state: location.state,
@@ -198,8 +198,9 @@ const UserSignup = () => {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
             <p className="text-xl font-poppins font-bold">Your details :</p>
             <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
+              {/* Full Name */}
               <div>
-                <label htmlFor="fullName" className="sr-only">
+                <label htmlFor="fullName" className="text-gray-700 font-medium">
                   Full Name
                 </label>
                 <input
@@ -208,13 +209,15 @@ const UserSignup = () => {
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
-                  placeholder="Enter Your Full Name"
+                  placeholder="Enter your full name"
                   required
                   autoComplete="name"
                 />
               </div>
+
+              {/* Email */}
               <div>
-                <label htmlFor="email" className="sr-only">
+                <label htmlFor="email" className="text-gray-700 font-medium">
                   Email
                 </label>
                 <input
@@ -223,28 +226,37 @@ const UserSignup = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
-                  placeholder="Enter Your Email Id"
+                  placeholder="Enter your email"
                   required
                   autoComplete="email"
                 />
               </div>
+
+              {/* Phone Number */}
               <div>
-                <label htmlFor="number" className="sr-only">
+                <label
+                  htmlFor="phoneNumber"
+                  className="text-gray-700 font-medium"
+                >
                   Phone Number
                 </label>
                 <input
-                  id="number"
+                  id="phoneNumber"
                   type="tel"
                   value={number}
                   onChange={(e) => setNumber(e.target.value)}
-                  className="px-4 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
-                  placeholder="Enter Your Phone Number"
+                  pattern="[0-9]{10}"
+                  inputMode="numeric"
+                  className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none appearance-none"
+                  placeholder="Enter your phone number"
                   required
                   autoComplete="tel"
                 />
               </div>
+
+              {/* Date of Birth */}
               <div>
-                <label htmlFor="dob" className="sr-only">
+                <label htmlFor="dob" className="text-gray-700 font-medium">
                   Date of Birth
                 </label>
                 <input
@@ -256,15 +268,17 @@ const UserSignup = () => {
                   required
                 />
               </div>
-              <div className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none">
-                <label htmlFor="gender" className="sr-only">
+
+              {/* Gender */}
+              <div>
+                <label htmlFor="gender" className="text-gray-700 font-medium">
                   Gender
                 </label>
                 <select
                   id="gender"
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
-                  className="outline-none font-poppins w-full"
+                  className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
                   required
                 >
                   <option value="" disabled>
@@ -276,11 +290,13 @@ const UserSignup = () => {
                 </select>
               </div>
             </div>
+
             <p className="text-xl font-poppins font-bold">Your Credentials :</p>
             <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
+              {/* Username */}
               <div>
-                <label htmlFor="userName" className="sr-only">
-                  User Name
+                <label htmlFor="userName" className="text-gray-700 font-medium">
+                  Username
                 </label>
                 <input
                   id="userName"
@@ -288,13 +304,15 @@ const UserSignup = () => {
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
                   className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
-                  placeholder="Enter Your Username"
+                  placeholder="Enter your username"
                   autoComplete="username"
                   required
                 />
               </div>
+
+              {/* Password */}
               <div>
-                <label htmlFor="password" className="sr-only">
+                <label htmlFor="pass" className="text-gray-700 font-medium">
                   Password
                 </label>
                 <div className="relative w-full">
@@ -303,47 +321,58 @@ const UserSignup = () => {
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
-                    placeholder="Enter Your Password"
+                    className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none pr-12"
+                    placeholder="Enter your password"
+                    autoComplete="new-password"
                     required
                   />
+                  {/* Toggle Password Visibility */}
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 cursor-pointer mt-2 right-4 flex items-center text-gray-600"
+                    className="absolute inset-y-0 right-4 flex items-center mt-2 text-gray-600"
+                    aria-label="Toggle password visibility"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 </div>
               </div>
+
+              {/* Confirm Password */}
               <div>
-                <label htmlFor="confirm password" className="sr-only">
+                <label
+                  htmlFor="confirmpass"
+                  className="text-gray-700 font-medium"
+                >
                   Confirm Password
                 </label>
                 <input
                   id="confirmpass"
-                  type="text"
+                  type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
-                  placeholder="Confirm Password"
+                  placeholder="Confirm your password"
+                  autoComplete="new-password"
                   required
                 />
               </div>
             </div>
+
             <sp className="text-xl font-poppins font-bold">
               Your Health-Care details :
             </sp>
             <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
-              <div className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none">
-                <label htmlFor="bgroup" className="sr-only">
-                  Gender
+              {/* Blood Group Selection */}
+              <div>
+                <label htmlFor="bgroup" className="text-gray-700 font-medium">
+                  Blood Group
                 </label>
                 <select
                   id="bgroup"
                   value={bloodGroup}
                   onChange={(e) => setBloodGroup(e.target.value)}
-                  className="outline-none font-poppins w-full"
+                  className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
                   required
                 >
                   <option value="" disabled>
@@ -359,9 +388,14 @@ const UserSignup = () => {
                   <option value="O-">O-</option>
                 </select>
               </div>
+
+              {/* Previous Medical Details */}
               <div>
-                <label htmlFor="previous" className="sr-only">
-                  prev medic
+                <label
+                  htmlFor="prevmedic"
+                  className="text-gray-700 font-medium"
+                >
+                  Previous Medical Details
                 </label>
                 <input
                   id="prevmedic"
@@ -369,27 +403,37 @@ const UserSignup = () => {
                   value={prevMedic}
                   onChange={(e) => setPrevMedic(e.target.value)}
                   className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
-                  placeholder="Enter Your Previoud Medical Details"
+                  placeholder="Enter your previous medical details"
                   required
                 />
               </div>
+
+              {/* Allergies */}
               <div>
-                <label htmlFor="alergies" className="sr-only">
-                  Alergies
+                <label
+                  htmlFor="allergies"
+                  className="text-gray-700 font-medium"
+                >
+                  Allergies
                 </label>
                 <input
-                  id="alergies"
+                  id="allergies"
                   type="text"
-                  value={alergies}
-                  onChange={(e) => setAlergies(e.target.value)}
+                  value={allergies}
+                  onChange={(e) => setAllergies(e.target.value)}
                   className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
-                  placeholder="Enter Your Alergies"
+                  placeholder="Enter your allergies"
                   required
                 />
               </div>
+
+              {/* Emergency Contact Name */}
               <div>
-                <label htmlFor="emergencyname" className="sr-only">
-                  Emergency Name
+                <label
+                  htmlFor="emergency_name"
+                  className="text-gray-700 font-medium"
+                >
+                  Emergency Contact Name
                 </label>
                 <input
                   id="emergency_name"
@@ -397,48 +441,59 @@ const UserSignup = () => {
                   value={emergencyName}
                   onChange={(e) => setEmergencyName(e.target.value)}
                   className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
-                  placeholder="Enter Your Emergency Contact"
+                  placeholder="Enter emergency contact name"
                   required
                 />
               </div>
+
+              {/* Emergency Contact Number */}
               <div>
-                <label htmlFor="emergencynumber" className="sr-only">
+                <label
+                  htmlFor="emergency_num"
+                  className="text-gray-700 font-medium"
+                >
                   Emergency Phone Number
                 </label>
                 <input
                   id="emergency_num"
-                  type="number"
+                  type="tel"
+                  pattern="[0-9]{10}"
                   value={emergencyNum}
                   onChange={(e) => setEmergencyNum(e.target.value)}
-                  className="px-4 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
-                  placeholder="Enter Your Emergency Number"
+                  className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
+                  placeholder="Enter emergency phone number"
                   required
                 />
               </div>
             </div>
+
             <p className="text-xl font-poppins font-bold">
               Your Location details :
             </p>
             <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
               <div className="flex items-center gap-2">
-                <label className="text-gray-700 font-medium">
+                <label htmlFor="use-gps" className="text-gray-700 font-medium">
                   Use GPS Location:
                 </label>
                 <input
                   type="checkbox"
+                  id="use-gps"
+                  name="useAutoLocation"
                   checked={useAutoLocation}
                   onChange={() => setUseAutoLocation(!useAutoLocation)}
                   className="w-5 h-5"
                 />
               </div>
+
               {useAutoLocation && (
                 <>
                   <input type="hidden" value={location.latitude} readOnly />
                   <input type="hidden" value={location.longitude} readOnly />
                 </>
               )}
+
               <div>
-                <label htmlFor="address" className="sr-only">
+                <label htmlFor="address" className="text-gray-700 font-medium">
                   Address
                 </label>
                 <input
@@ -453,8 +508,9 @@ const UserSignup = () => {
                   readOnly={useAutoLocation}
                 />
               </div>
+
               <div>
-                <label htmlFor="city" className="sr-only">
+                <label htmlFor="city" className="text-gray-700 font-medium">
                   City
                 </label>
                 <input
@@ -469,8 +525,9 @@ const UserSignup = () => {
                   readOnly={useAutoLocation}
                 />
               </div>
+
               <div>
-                <label htmlFor="state" className="sr-only">
+                <label htmlFor="state" className="text-gray-700 font-medium">
                   State
                 </label>
                 <input
@@ -485,8 +542,9 @@ const UserSignup = () => {
                   readOnly={useAutoLocation}
                 />
               </div>
+
               <div>
-                <label htmlFor="country" className="sr-only">
+                <label htmlFor="country" className="text-gray-700 font-medium">
                   Country
                 </label>
                 <input
@@ -501,11 +559,13 @@ const UserSignup = () => {
                   readOnly={useAutoLocation}
                 />
               </div>
+
               {useAutoLocation && (
                 <button
                   type="button"
                   onClick={getUserLocation}
-                  className="px-4 py-2 bg-gradient-to-br from-sky-300 via-sky-500 to-sky-700 cursor-pointer text-white rounded-lg mt-2"
+                  className="px-4 flex justify-center items-center h-2/3 py-2 bg-gradient-to-br from-sky-300 via-sky-500 to-sky-700 cursor-pointer text-white rounded-lg mt-7"
+                  aria-label="Refresh location using GPS"
                 >
                   Refresh Location
                 </button>
