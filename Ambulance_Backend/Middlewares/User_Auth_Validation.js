@@ -46,7 +46,7 @@ const UserSignupValidation = (req, res, next) => {
 
         prevMedic: Joi.string().allow("", null).default("None"),
 
-        alergies: Joi.string().allow("", null).default("None"),
+        allergies: Joi.string().allow("", null).default("None"),
 
         emergencyName: Joi.string().min(3).max(50).trim().required(),
 

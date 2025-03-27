@@ -17,7 +17,7 @@ const userSchema = new Schema({
         required: true,
     },
     prevMedic: { type: String, default: "None" },
-    alergies: { type: String, default: "None" },
+    allergies: { type: String, default: "None" },
 
     emergencyName: { type: String, required: true },
     emergencyNum: { type: String, required: true },
