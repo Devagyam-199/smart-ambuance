@@ -70,7 +70,6 @@ const UserSignup = () => {
             userName,
             password,
             confirmPassword,
-            otp,
             bloodGroup,
             prevMedic,
             allergies,
@@ -348,7 +347,7 @@ const UserSignup = () => {
                 </label>
                 <input
                   id="confirmpass"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"

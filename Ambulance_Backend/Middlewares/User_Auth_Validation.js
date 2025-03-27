@@ -40,8 +40,6 @@ const UserSignupValidation = (req, res, next) => {
             .required()
             .messages({ "any.only": "Passwords must match" }),
 
-        otp: Joi.string().length(6).optional(),
-
         bloodGroup: Joi.string()
             .valid("A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-", "Unknown")
             .required(),
