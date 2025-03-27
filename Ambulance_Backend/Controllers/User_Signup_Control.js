@@ -1,5 +1,5 @@
 const User = require('../Models/User_Cred');
-const bcrypt = require('bcrypt'); 
+const bcrypt = require('bcryptjs'); 
 const jwttoken = require('jsonwebtoken');
 const otpStore = new Map(); 
 
