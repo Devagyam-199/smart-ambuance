@@ -1,75 +1,81 @@
-import { useState, useEffect } from "react";
-import { TileLayer, Marker, Popup, MapContainer, useMap } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import React from "react";
-import { ZoomControl } from "react-leaflet";
-import L from "leaflet";
-import AmbulanceMarker from "./ambulanceMarker";
+import React, { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import L from 'leaflet';
+import { getDistance } from 'geolib';
+import 'leaflet/dist/leaflet.css';
 
-// Fix leaflet default icon paths
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
-  iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+const ambulanceIcon = new L.Icon({
+  iconUrl: '../images/ambulanceMarker.png', // make sure this path is correct
+  iconSize: [30, 30],
+  iconAnchor: [15, 30],
+  popupAnchor: [0, -30],
 });
 
-// Custom component to recenter map when coordinates change
-const RecenterMap = ({ lat, lng }) => {
+const generateNearbyAmbulances = (lat, lng, count = 5) =>
+  Array.from({ length: count }).map((_, i) => ({
+    id: i + 1,
+    name: `Ambulance ${i + 1}`,
+    position: [
+      lat + (Math.random() - 0.5) * 0.005, // ~500m range
+      lng + (Math.random() - 0.5) * 0.005,
+    ],
+  }));
+
+const SetViewToUser = ({ coords }) => {
   const map = useMap();
   useEffect(() => {
-    if (lat && lng) {
-      map.setView([lat, lng], 16);
+    if (coords) {
+      map.setView(coords, 16);
     }
-  }, [lat, lng, map]);
+  }, [coords, map]);
   return null;
 };
 
-const UserMainPage = () => {
-  const [userLocation, setUserLocation] = useState({ lat: null, lng: null });
+const MapWithAmbulances = () => {
+  const [userLocation, setUserLocation] = useState(null);
+  const [ambulances, setAmbulances] = useState([]);
 
   useEffect(() => {
-    const watchId = navigator.geolocation.watchPosition(
+    navigator.geolocation.getCurrentPosition(
       (position) => {
-        const { latitude, longitude } = position.coords;
-        setUserLocation({ lat: latitude, lng: longitude });
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        setUserLocation([lat, lng]);
+
+        const generatedAmbulances = generateNearbyAmbulances(lat, lng);
+        setAmbulances(generatedAmbulances);
       },
       (error) => {
-        console.error("Error getting location", error);
-      },
-      { enableHighAccuracy: true, maximumAge: 0 }
+        console.error('Error fetching location:', error);
+      }
     );
-
-    return () => navigator.geolocation.clearWatch(watchId);
   }, []);
 
   return (
-    <div className="h-[90vh] w-full">
-      {userLocation.lat && userLocation.lng ? (
-        <MapContainer
-          center={[userLocation.lat, userLocation.lng]}
-          zoom={16}
-          scrollWheelZoom={true}
-          zoomControl={false}
-          style={{ height: "100%", width: "100%" }}
-        >
-          <ZoomControl position="bottomright" />
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          />
-          <AmbulanceMarker />
-          <Marker position={[userLocation.lat, userLocation.lng]}>
-            <Popup>Your current location</Popup>
+    <MapContainer
+      center={userLocation || [19.295, 72.854]} // default center
+      zoom={15}
+      style={{ height: '100vh', width: '100%' }}
+    >
+      <TileLayer
+        attribution='&copy; OpenStreetMap contributors'
+        url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+      />
+      {userLocation && (
+        <>
+          <SetViewToUser coords={userLocation} />
+          <Marker position={userLocation}>
+            <Popup>You are here</Popup>
           </Marker>
-          <RecenterMap lat={userLocation.lat} lng={userLocation.lng} />
-        </MapContainer>
-      ) : (
-        <p className="text-center text-gray-600">Getting your location...</p>
+        </>
       )}
-    </div>
+      {ambulances.map((amb) => (
+        <Marker key={amb.id} position={amb.position} icon={ambulanceIcon}>
+          <Popup>{amb.name}</Popup>
+        </Marker>
+      ))}
+    </MapContainer>
   );
 };
 
-export default UserMainPage;
+export default MapWithAmbulances;
