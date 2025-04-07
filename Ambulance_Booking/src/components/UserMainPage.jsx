@@ -58,6 +58,7 @@ const UserMainPage = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           />
+          <AmbulanceMarkers />
           <Marker position={[userLocation.lat, userLocation.lng]}>
             <Popup>Your current location</Popup>
           </Marker>
