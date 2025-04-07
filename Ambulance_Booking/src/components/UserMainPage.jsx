@@ -81,7 +81,7 @@ const UserMainPage = () => {
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           />
           <Marker position={[userLocation.lat, userLocation.lng]}>
-            <Popup>Your current location</Popup>
+            <Popup>Your current location </Popup>
           </Marker>
           <RecenterMap lat={userLocation.lat} lng={userLocation.lng} />
         </MapContainer>
