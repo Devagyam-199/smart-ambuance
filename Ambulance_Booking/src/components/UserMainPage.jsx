@@ -1,31 +1,71 @@
-import { useState } from "react";
-import React from 'react'
-import { Eye, EyeOff } from "lucide-react"; // Import eye icons (optional)
+import { useState, useEffect } from "react";
+import { TileLayer, Marker, Popup, MapContainer } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import React from "react";
+import L from "leaflet";
+
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetianlUrl:
+    "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
+  iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+});
+
+const RecenterMap = ({ lat, lng }) => {
+  const map = useMap();
+  useEffect(() => {
+    if (lat && lng) {
+      map.setView([lat, lng], 16);
+    }
+  }, [lat, lng, map]);
+  return null;
+};
 
 const UserMainPage = () => {
-    const [password, setPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
+  const [userLocation, setUserLocation] = useState({
+    lat: null,
+    lng: null,
+  });
 
-    return (
-        <div className="relative w-full">
-            <input
-                id="pass"
-                type={showPassword ? "text" : "password"}
-                value={password}  
-                onChange={(e) => setPassword(e.target.value)}
-                className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
-                placeholder="Enter Your Password"
-                required
+  useEffect(() => {
+    const watchId = navigator.geolocation.watchPosition(
+      (watchPosition) => {
+        const { latitude, longitude } = PosAnimation.coords;
+        setUserLocation({ lat: latitude, lng: longitude });
+      },
+      (error) => {
+        console.error("Error getting location", error);
+      },
+      { enableHighAccuracy: true, maximumAge: 0 }
+    );
+
+    return () => navigator.geolocation.clearWatch(watchId);
+  }, []);
+
+  return (
+    <>
+      <div className="h-[90vh] w-full">
+        {userLocation.lat && userLocation.lng ? (
+          <MapContainer
+            center={[userLocation.lat, userLocation.lng]}
+            zoom={16}
+            scrollWheelZoom={true}
+            style={{ height: "100%", width: "100%" }}
+          >
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             />
-            <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-4 flex items-center text-gray-600"
-            >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
-        </div>
-  )
-}
+            <Marker position={[userLocation.lat, userLocation.lng]} />
+            <RecenterMap lat={userLocation.lat} lng={userLocation.lng} />
+          </MapContainer>
+        ) : (
+          <p>Getting your location...</p>
+        )}
+      </div>
+    </>
+  );
+};
 
-export default UserMainPage
+export default UserMainPage;
