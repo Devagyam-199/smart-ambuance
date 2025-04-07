@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
-import { TileLayer, Marker, Popup, MapContainer, useMap } from "react-leaflet";
+import {
+  TileLayer,
+  Marker,
+  Popup,
+  MapContainer,
+  useMap,
+  ZoomControl,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import React from "react";
-import { ZoomControl } from "react-leaflet";
 import L from "leaflet";
 
 // Fix leaflet default icon paths
@@ -26,9 +32,12 @@ const RecenterMap = ({ lat, lng }) => {
 };
 
 const UserMainPage = () => {
-  const [userLocation, setUserLocation] = useState({ lat: null, lng: null });
+  const [userLocation, setUserLocation] = useState(null);
+  const [locationAccess, setLocationAccess] = useState(false);
 
   useEffect(() => {
+    if (!locationAccess) return;
+
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
@@ -41,11 +50,24 @@ const UserMainPage = () => {
     );
 
     return () => navigator.geolocation.clearWatch(watchId);
-  }, []);
+  }, [locationAccess]);
+
+  const handleAllowLocation = () => {
+    setLocationAccess(true);
+  };
 
   return (
     <div className="h-[90vh] w-full">
-      {userLocation.lat && userLocation.lng ? (
+      {!locationAccess ? (
+        <div className="flex justify-center items-center h-full">
+          <button
+            onClick={handleAllowLocation}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all"
+          >
+            Allow Location Access
+          </button>
+        </div>
+      ) : userLocation ? (
         <MapContainer
           center={[userLocation.lat, userLocation.lng]}
           zoom={16}
