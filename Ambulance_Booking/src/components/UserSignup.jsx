@@ -29,6 +29,15 @@ const UserSignup = () => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [match, setMatch] = useState(null);
+
+  useEffect(() => {
+    if (password && confirmPassword) {
+      setMatch(password === confirmPassword);
+    } else {
+      setMatch(null);
+    }
+  }, [password, confirmPassword]);
 
   /* user healthcare variables*/
   const [bloodGroup, setBloodGroup] = useState("");
@@ -39,21 +48,17 @@ const UserSignup = () => {
 
   const navigate = useNavigate();
 
+  const [errors, setErrors] = useState({});
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors({});
 
     if (number.length !== 10 || isNaN(number)) {
       alert("Invalid phone number. Please enter a 10-digit number.");
       setNumber("");
       return;
     }
-
-    console.log(`Full Name: ${fullName},
-                    Email: ${email},
-                    Phone Number: ${number},
-                    DOB: ${dob},
-                    Gender: ${gender}.
-                    Address: ${`${location.address},${location.city}`}`);
 
     try {
       const response = await fetch(
@@ -93,17 +98,24 @@ const UserSignup = () => {
         console.log("Signup Successful:", data);
         alert("Sign-Up successful!");
 
-        // Redirect after Singup
         setTimeout(() => {
           navigate("/login");
         }, 1000);
       } else {
         console.error("Sign-Up Failed:", data);
-        alert(data.error);
+
+        if (data.errors) {
+          setErrors(data.errors);
+
+          const errorMessages = Object.values(data.errors).join("\n");
+          alert(errorMessages);
+        } else {
+          alert("Something went wrong. Please try again.");
+        }
       }
     } catch (error) {
       console.error("Error during Sign-Up:", error);
-      alert("Something went wrong. Please try again.");
+      alert("Something went wrong. Please try again.-");
     }
   };
 
@@ -198,7 +210,8 @@ const UserSignup = () => {
             <p className="text-xl font-poppins font-bold">Your details :</p>
             <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
               {/* Full Name */}
-              <div>
+              {/* Full Name */}
+              <div className="mb-4">
                 <label htmlFor="fullName" className="text-gray-700 font-medium">
                   Full Name
                 </label>
@@ -207,15 +220,22 @@ const UserSignup = () => {
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
+                  className={`px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins outline-none ${
+                    errors.fullName
+                      ? "border-red-500 focus:border-red-600"
+                      : "border-gray-400 focus:border-gray-600"
+                  }`}
                   placeholder="Enter your full name"
                   required
                   autoComplete="name"
                 />
+                {errors.fullName && (
+                  <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>
+                )}
               </div>
 
               {/* Email */}
-              <div>
+              <div className="mb-4">
                 <label htmlFor="email" className="text-gray-700 font-medium">
                   Email
                 </label>
@@ -224,15 +244,22 @@ const UserSignup = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
+                  className={`px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins outline-none ${
+                    errors.email
+                      ? "border-red-500 focus:border-red-600"
+                      : "border-gray-400 focus:border-gray-600"
+                  }`}
                   placeholder="Enter your email"
                   required
                   autoComplete="email"
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                )}
               </div>
 
               {/* Phone Number */}
-              <div>
+              <div className="mb-4">
                 <label
                   htmlFor="phoneNumber"
                   className="text-gray-700 font-medium"
@@ -246,15 +273,22 @@ const UserSignup = () => {
                   onChange={(e) => setNumber(e.target.value)}
                   pattern="[0-9]{10}"
                   inputMode="numeric"
-                  className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none appearance-none"
+                  className={`px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins outline-none appearance-none ${
+                    errors.number
+                      ? "border-red-500 focus:border-red-600"
+                      : "border-gray-400 focus:border-gray-600"
+                  }`}
                   placeholder="Enter your phone number"
                   required
                   autoComplete="tel"
                 />
+                {errors.number && (
+                  <p className="text-red-500 text-sm mt-1">{errors.number}</p>
+                )}
               </div>
 
               {/* Date of Birth */}
-              <div>
+              <div className="mb-4">
                 <label htmlFor="dob" className="text-gray-700 font-medium">
                   Date of Birth
                 </label>
@@ -263,13 +297,20 @@ const UserSignup = () => {
                   type="date"
                   value={dob}
                   onChange={(e) => setDob(e.target.value)}
-                  className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
+                  className={`px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins outline-none ${
+                    errors.dob
+                      ? "border-red-500 focus:border-red-600"
+                      : "border-gray-400 focus:border-gray-600"
+                  }`}
                   required
                 />
+                {errors.dob && (
+                  <p className="text-red-500 text-sm mt-1">{errors.dob}</p>
+                )}
               </div>
 
               {/* Gender */}
-              <div>
+              <div className="mb-4">
                 <label htmlFor="gender" className="text-gray-700 font-medium">
                   Gender
                 </label>
@@ -277,7 +318,11 @@ const UserSignup = () => {
                   id="gender"
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
-                  className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
+                  className={`px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins outline-none ${
+                    errors.gender
+                      ? "border-red-500 focus:border-red-600"
+                      : "border-gray-400 focus:border-gray-600"
+                  }`}
                   required
                 >
                   <option value="" disabled>
@@ -287,13 +332,16 @@ const UserSignup = () => {
                   <option value="female">Female</option>
                   <option value="other">Other</option>
                 </select>
+                {errors.gender && (
+                  <p className="text-red-500 text-sm mt-1">{errors.gender}</p>
+                )}
               </div>
             </div>
 
             <p className="text-xl font-poppins font-bold">Your Credentials :</p>
             <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
               {/* Username */}
-              <div>
+              <div className="mb-4">
                 <label htmlFor="userName" className="text-gray-700 font-medium">
                   Username
                 </label>
@@ -302,15 +350,22 @@ const UserSignup = () => {
                   type="text"
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
-                  className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
+                  className={`px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins outline-none ${
+                    errors.userName
+                      ? "border-red-500 focus:border-red-600"
+                      : "border-gray-400 focus:border-gray-600"
+                  }`}
                   placeholder="Enter your username"
                   autoComplete="username"
                   required
                 />
+                {errors.userName && (
+                  <p className="text-red-500 text-sm mt-1">{errors.userName}</p>
+                )}
               </div>
 
               {/* Password */}
-              <div>
+              <div className="mb-4">
                 <label htmlFor="pass" className="text-gray-700 font-medium">
                   Password
                 </label>
@@ -320,12 +375,15 @@ const UserSignup = () => {
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none pr-12"
+                    className={`px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins pr-12 outline-none ${
+                      errors.password
+                        ? "border-red-500 focus:border-red-600"
+                        : "border-gray-400 focus:border-gray-600"
+                    }`}
                     placeholder="Enter your password"
                     autoComplete="new-password"
                     required
                   />
-                  {/* Toggle Password Visibility */}
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
@@ -335,10 +393,13 @@ const UserSignup = () => {
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 </div>
+                {errors.password && (
+                  <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+                )}
               </div>
 
               {/* Confirm Password */}
-              <div>
+              <div className="mb-4">
                 <label
                   htmlFor="confirmpass"
                   className="text-gray-700 font-medium"
@@ -350,11 +411,29 @@ const UserSignup = () => {
                   type={showPassword ? "text" : "password"}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins border-gray-400 focus:border-gray-600 outline-none"
+                  className={`px-4 py-3 w-full border-2 mt-2 rounded-lg font-poppins outline-none ${
+                    errors.confirmPassword
+                      ? "border-red-500 focus:border-red-600"
+                      : "border-gray-400 focus:border-gray-600"
+                  }`}
                   placeholder="Confirm your password"
                   autoComplete="new-password"
                   required
                 />
+                {errors.confirmPassword && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.confirmPassword}
+                  </p>
+                )}
+
+                {match === false && (
+                  <p className="text-red-500 text-sm mt-1">
+                    Passwords do not match
+                  </p>
+                )}
+                {match === true && (
+                  <p className="text-green-600 text-sm mt-1">Passwords match</p>
+                )}
               </div>
             </div>
 
