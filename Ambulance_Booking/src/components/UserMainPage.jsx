@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { TileLayer, Marker, Popup, MapContainer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import React from "react";
+import { ZoomControl } from "react-leaflet";
 import L from "leaflet";
 
 // Fix leaflet default icon paths
@@ -49,8 +50,10 @@ const UserMainPage = () => {
           center={[userLocation.lat, userLocation.lng]}
           zoom={16}
           scrollWheelZoom={true}
+          zoomControl={false}
           style={{ height: "100%", width: "100%" }}
         >
+          <ZoomControl position="bottomright" />
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
