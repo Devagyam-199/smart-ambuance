@@ -1,12 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  TileLayer,
-  Marker,
-  Popup,
-  MapContainer,
-  useMap,
-  ZoomControl,
-} from "react-leaflet";
+import { TileLayer, Marker, Popup, MapContainer, useMap, ZoomControl } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import React from "react";
 import L from "leaflet";
@@ -14,8 +7,7 @@ import L from "leaflet";
 // Fix leaflet default icon paths
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
+  iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
@@ -81,7 +73,7 @@ const UserMainPage = () => {
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           />
           <Marker position={[userLocation.lat, userLocation.lng]}>
-            <Popup>Your current location </Popup>
+            <Popup>Your current location</Popup>
           </Marker>
           <RecenterMap lat={userLocation.lat} lng={userLocation.lng} />
         </MapContainer>
