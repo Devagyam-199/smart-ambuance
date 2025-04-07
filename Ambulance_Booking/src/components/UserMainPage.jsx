@@ -9,7 +9,7 @@ import userMarkerImg from "../images/finalfinal.png"; // Optional: change this i
 // Custom icon for ambulances
 const ambulanceIcon = new L.Icon({
   iconUrl: ambulanceMarkerImg,
-  iconSize: [30, 30],
+  iconSize: [60, 60],
   iconAnchor: [15, 30],
   popupAnchor: [0, -30],
 });
@@ -17,7 +17,7 @@ const ambulanceIcon = new L.Icon({
 // Optional: Custom icon for the user
 const userIcon = new L.Icon({
   iconUrl: userMarkerImg,
-  iconSize: [30, 30],
+  iconSize: [50, 50],
   iconAnchor: [15, 30],
   popupAnchor: [0, -30],
 });
@@ -26,10 +26,10 @@ const userIcon = new L.Icon({
 const generateNearbyAmbulances = (lat, lng, count = 5) =>
   Array.from({ length: count }).map((_, i) => ({
     id: i + 1,
-    name: `Ambulance ${i + 1}`,
+    name: `Available`,
     position: [
-      lat + (Math.random() - 0.5) * 0.005, // ~500 meters radius
-      lng + (Math.random() - 0.5) * 0.005,
+      lat + (Math.random() - 0.5) * 0.01, // ~500 meters radius
+      lng + (Math.random() - 0.5) * 0.01,
     ],
   }));
 
