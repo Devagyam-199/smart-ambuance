@@ -4,6 +4,7 @@ import "leaflet/dist/leaflet.css";
 import React from "react";
 import { ZoomControl } from "react-leaflet";
 import L from "leaflet";
+import AmbulanceMarker from "./ambulanceMarker";
 
 // Fix leaflet default icon paths
 delete L.Icon.Default.prototype._getIconUrl;
@@ -58,7 +59,7 @@ const UserMainPage = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           />
-          <AmbulanceMarkers />
+          <AmbulanceMarker />
           <Marker position={[userLocation.lat, userLocation.lng]}>
             <Popup>Your current location</Popup>
           </Marker>
