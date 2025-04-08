@@ -60,7 +60,7 @@ const getRoute = async (start, end) => {
     },
     {
       headers: {
-        Authorization: "YOUR_OPENROUTESERVICE_API_KEY",
+        Authorization: "5b3ce3597851110001cf624811f93877a93d448b9a0ab9a7c5e38f59",
         "Content-Type": "application/json",
       },
     }
