@@ -3,18 +3,14 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-import ambulanceMarkerImg from "../images/ambulanceMarker.png";
-import userMarkerImg from "../images/finalfinal.png"; // Optional: change this if you want another icon for user
+// Import custom icons
+import userMarkerImg from "../images/finalfinal.png";
+import basicAmbulanceMarker from "../images/basicAmbulanceMarker.png";
+import bikeAmbulanceMarker from "../images/bikeAmbulanceMarker.png";
+import icuAmbulanceMarker from "../images/icuAmbulanceMarker.png";
+import neonatalAmbulanceMarker from "../images/neonatalAmbulanceMarker.png";
 
-// Custom icon for ambulances
-const ambulanceIcon = new L.Icon({
-  iconUrl: ambulanceMarkerImg,
-  iconSize: [60, 60],
-  iconAnchor: [15, 30],
-  popupAnchor: [0, -30],
-});
-
-// Optional: Custom icon for the user
+// Icons
 const userIcon = new L.Icon({
   iconUrl: userMarkerImg,
   iconSize: [50, 50],
@@ -22,16 +18,50 @@ const userIcon = new L.Icon({
   popupAnchor: [0, -30],
 });
 
-// Generate fake ambulance markers around user's location
-const generateNearbyAmbulances = (lat, lng, count = 5) =>
-  Array.from({ length: count }).map((_, i) => ({
-    id: i + 1,
-    name: `Available`,
-    position: [
-      lat + (Math.random() - 0.5) * 0.01, // ~500 meters radius
-      lng + (Math.random() - 0.5) * 0.01,
-    ],
-  }));
+const ambulanceIcons = {
+  basic: new L.Icon({
+    iconUrl: basicAmbulanceMarker,
+    iconSize: [60, 60],
+    iconAnchor: [15, 30],
+    popupAnchor: [0, -30],
+  }),
+  bike: new L.Icon({
+    iconUrl: bikeAmbulanceMarker,
+    iconSize: [60, 60],
+    iconAnchor: [15, 30],
+    popupAnchor: [0, -30],
+  }),
+  icu: new L.Icon({
+    iconUrl: icuAmbulanceMarker,
+    iconSize: [60, 60],
+    iconAnchor: [15, 30],
+    popupAnchor: [0, -30],
+  }),
+  neonatal: new L.Icon({
+    iconUrl: neonatalAmbulanceMarker,
+    iconSize: [60, 60],
+    iconAnchor: [15, 30],
+    popupAnchor: [0, -30],
+  }),
+};
+
+// Ambulance types
+const ambulanceTypes = ["basic", "bike", "icu", "neonatal"];
+
+// Generate fake ambulance markers
+const generateNearbyAmbulances = (lat, lng, count = 7) =>
+  Array.from({ length: count }).map((_, i) => {
+    const type = ambulanceTypes[Math.floor(Math.random() * ambulanceTypes.length)];
+    return {
+      id: i + 1,
+      type,
+      name: `${type.charAt(0).toUpperCase() + type.slice(1)} Ambulance`,
+      position: [
+        lat + (Math.random() - 0.5) * 0.01,
+        lng + (Math.random() - 0.5) * 0.01,
+      ],
+    };
+  });
 
 // Helper to move map to user's location
 const SetViewToUser = ({ coords }) => {
@@ -47,6 +77,12 @@ const SetViewToUser = ({ coords }) => {
 const MapWithAmbulances = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [ambulances, setAmbulances] = useState([]);
+  const [bookedAmbulanceId, setBookedAmbulanceId] = useState(null);
+
+  const handleBookAmbulance = (id) => {
+    setBookedAmbulanceId(id);
+    alert(`🚑 Ambulance ${id} has been booked!`);
+  };
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -60,7 +96,6 @@ const MapWithAmbulances = () => {
       },
       (error) => {
         console.error("Error fetching location:", error);
-        // Fallback location
         const fallbackLat = 19.295;
         const fallbackLng = 72.854;
         setUserLocation([fallbackLat, fallbackLng]);
@@ -94,8 +129,22 @@ const MapWithAmbulances = () => {
       )}
 
       {ambulances.map((amb) => (
-        <Marker key={amb.id} position={amb.position} icon={ambulanceIcon}>
-          <Popup>{amb.name}</Popup>
+        <Marker key={amb.id} position={amb.position} icon={ambulanceIcons[amb.type]}>
+          <Popup>
+            <div>
+              <strong>{amb.name}</strong>
+              <br />
+              Type: {amb.type}
+              <br />
+              {bookedAmbulanceId === amb.id ? (
+                <span style={{ color: "green" }}>✅ Booked</span>
+              ) : (
+                <button onClick={() => handleBookAmbulance(amb.id)}>
+                  Book Ambulance
+                </button>
+              )}
+            </div>
+          </Popup>
         </Marker>
       ))}
     </MapContainer>
