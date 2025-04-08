@@ -29,7 +29,7 @@ const ambulanceTypes = {
 const createIcon = (img) =>
   new L.Icon({
     iconUrl: img,
-    iconSize: [50, 50],
+    iconSize: [30, 50],
     iconAnchor: [15, 30],
     popupAnchor: [0, -30],
   });
