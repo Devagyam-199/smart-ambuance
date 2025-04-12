@@ -12,6 +12,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.0.8",
     "axios": "^1.8.4",
+    "dotenv": "^16.5.0",
     "geolib": "^3.3.4",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.479.0",

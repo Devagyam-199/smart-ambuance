@@ -60,7 +60,7 @@ const MapWithAmbulances = () => {
   const animationRef = useRef(null);
   const speed = 999; // ms between each move – slower speed = more realistic
 
-  const API_KEY = "5b3ce3597851110001cf624811f93877a93d448b9a0ab9a7c5e38f59";
+  const API_KEY = import.meta.env.VITE_ROUTES_API_KEY;
 
   const fetchRouteAndAnimate = async (ambulance, userLoc) => {
     const [startLat, startLng] = ambulance.position;
