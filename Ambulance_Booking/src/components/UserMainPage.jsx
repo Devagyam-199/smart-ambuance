@@ -120,20 +120,29 @@ const MapWithAmbulances = () => {
   };
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        setUserLocation([lat, lng]);
-        setAmbulances(generateNearbyAmbulances(lat, lng));
-      },
-      () => {
-        const fallbackLat = 19.295;
-        const fallbackLng = 72.854;
-        setUserLocation([fallbackLat, fallbackLng]);
-        setAmbulances(generateNearbyAmbulances(fallbackLat, fallbackLng));
-      }
-    );
+    const getUserLocation = () => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          setUserLocation([lat, lng]);
+          setAmbulances(generateNearbyAmbulances(lat, lng));
+        },
+        (error) => {
+          console.error("Geolocation error:", error);
+          alert(
+            "Unable to get your location. Please enable GPS/location services and allow location access in your browser."
+          );
+        },
+        {
+          enableHighAccuracy: true, // Forces GPS instead of rough IP location
+          timeout: 10000, // Max wait time for location fix
+          maximumAge: 0, // Always get fresh location
+        }
+      );
+    };
+
+    getUserLocation();
   }, []);
 
   useEffect(() => {
