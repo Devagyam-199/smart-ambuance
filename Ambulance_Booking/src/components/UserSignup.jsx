@@ -62,7 +62,7 @@ const UserSignup = () => {
 
     try {
       const response = await fetch(
-        "https://smart-ambuance-backend.onrender.com/user_auth/signup_auth",
+        "http://localhost:8080/user_auth/signup_auth",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
