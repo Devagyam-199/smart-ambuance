@@ -135,9 +135,9 @@ const MapWithAmbulances = () => {
           );
         },
         {
-          enableHighAccuracy: true, // Forces GPS instead of rough IP location
-          timeout: 10000, // Max wait time for location fix
-          maximumAge: 0, // Always get fresh location
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0,
         }
       );
     };
