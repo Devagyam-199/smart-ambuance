@@ -13,11 +13,11 @@
     "bcryptjs": "^3.0.2",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.6.1",
     "express": "^4.21.2",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.12.1",
-    "twilio": "^5.5.1"
+    "mongoose": "^8.17.1",
+    "twilio": "^5.8.0"
   }
 }
