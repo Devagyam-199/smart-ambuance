@@ -15,5 +15,5 @@ mongoose.connect(mongo_url, {
 .then(() => console.log("Connection successful to MongoDB"))
 .catch((err) => {
     console.error(`Connection failed: ${err.message}`);
-    process.exit(1);
+    process.exit(1);zww
 });
