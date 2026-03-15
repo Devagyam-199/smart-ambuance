@@ -48,4 +48,12 @@ const userAuth = async (req, res) => {
   }
 };
 
-export default userAuth;
+import User from "../models/User.model.js";
+
+export const getMe = async (req, res) => {
+  const user = await User.findById(req.user.userId).select("-__v");
+  if (!user) return res.status(404).json({ error: "User not found" });
+  res.json({ user });
+};
+
+export default { userAuth, getMe };
