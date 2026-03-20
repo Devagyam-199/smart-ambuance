@@ -1,59 +1,53 @@
-import admin from "../config/firebase.js";
-import jwt from "jsonwebtoken";
-import User from "../Models/Users.models.js";
-import apiError from "../Utils/apiError.utils.js";
+import verifyToken  from "../services/msg91.services.js"
+import User from "../Models/Users.models.js"
+import jwt from "jsonwebtoken"
 
-const userAuth = async (req, res) => {
-  const { idToken } = req.body;
-  if (!idToken) {
-    throw new apiError(400, "Id Token is missing for authentication");
+export const verifyTokenController = async (req, res) => {
+  const { accessToken, role = "User" } = req.body
+
+  if (!accessToken) {
+    return res.status(400).json({
+      success: false,
+      error: "accessToken from MSG91 widget is required"
+    })
   }
 
   try {
-    const decodedUid = await admin.auth().verifyIdToken(idToken);
-    const decodedPhoneNumber = decodedUid.phone_number;
+    const mobile = await verifyToken(accessToken)
 
-    let user = await User.findOne({ phoneNumber: decodedPhoneNumber });
+    const phone = `+${mobile}`
+
+    let user = await User.findOne({ phoneNumber: phone })
     if (!user) {
       user = await User.create({
-        phoneNumber: decodedPhoneNumber,
-        firebaseUid: decodedUid.uid,
-      });
-    } else {
-      await user.save();
+        phoneNumber: phone,
+        role: "User",
+      })
     }
 
-    const accessToken = jwt.sign(
-      {
-        userId: user._id,
-        phoneNum: decodedPhoneNumber,
-      },
+    const jwtToken = jwt.sign(
+      { userId: user._id, phone: user.phoneNumber, role: user.role },
       process.env.Access_Token_Secret,
-      {
-        expiresIn: "30d",
-      },
-    );
+      { expiresIn: "1d" }
+    )
 
-    res.status(201).json({
+    return res.status(200).json({
       success: true,
-      data: {
-        user,
-      },
-    });
-  } catch (error) {
-    throw new apiError(
-      500,
-      `Error while authentication, Source:(userAuthController), ${error}`,
-    );
-  }
-};
+      message: "Authenticated successfully",
+      data: { accessToken: jwtToken, user }
+    })
 
-import User from "../models/User.model.js";
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message })
+  }
+}
 
 export const getMe = async (req, res) => {
-  const user = await User.findById(req.user.userId).select("-__v");
-  if (!user) return res.status(404).json({ error: "User not found" });
-  res.json({ user });
-};
-
-export default { userAuth, getMe };
+  try {
+    const user = await User.findById(req.user.userId).select("-__v")
+    if (!user) return res.status(404).json({ success: false, error: "User not found" })
+    return res.status(200).json({ success: true, user })
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message })
+  }
+}

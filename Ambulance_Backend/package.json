@@ -11,19 +11,18 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "axios": "^1.13.6",
     "bcryptjs": "^3.0.3",
-    "body-parser": "^1.20.3",
+    "cloudinary": "^2.9.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^16.6.1",
-    "express": "^4.21.2",
+    "express": "^4.22.1",
     "express-rate-limit": "^8.3.1",
-    "firebase-admin": "^13.7.0",
-    "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^8.12.1",
-    "socket.io": "^4.8.3",
-    "twilio": "^5.5.1"
+    "mongoose": "^9.3.0",
+    "multer": "^2.1.1",
+    "socket.io": "^4.8.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"

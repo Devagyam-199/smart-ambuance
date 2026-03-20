@@ -13,12 +13,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-
-
-
+import authRoute from "./Routes/userAuth.routes.js";
+app.use("/api/v1/auth", authRoute);
 
 /************************** last line of code **************************/
 
-
 app.use(globalError);
-export default app;
+export { app };

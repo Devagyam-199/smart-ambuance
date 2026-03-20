@@ -1,0 +1,86 @@
+<!-- gettoken.html — save this on your Desktop and open in Chrome -->
+<!doctype html>
+<html>
+  <head>
+    <title>Get Firebase Token</title>
+  </head>
+  <body>
+    <h3>Step 1 — Enter your phone number</h3>
+    <input
+      id="phone"
+      placeholder="+919876543210"
+      style="padding: 8px; width: 200px"
+    />
+    <button onclick="sendOTP()">Send OTP</button>
+
+    <br /><br />
+    <h3>Step 2 — Enter OTP you received</h3>
+    <input id="otp" placeholder="123456" style="padding: 8px; width: 200px" />
+    <button onclick="verifyOTP()">Verify OTP</button>
+
+    <br /><br />
+    <h3>Your idToken (paste into Postman):</h3>
+    <textarea
+      id="token"
+      rows="6"
+      style="width: 100%; font-size: 11px"
+      placeholder="Token appears here after verifying OTP..."
+    >
+    </textarea>
+
+    <div id="recaptcha-container"></div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+      import {
+        getAuth,
+        signInWithPhoneNumber,
+        RecaptchaVerifier,
+      } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+
+      // paste your Firebase config here
+      const app = initializeApp({
+        apiKey: "AIzaSyAboQAqSc7RYVtIEPRn1pAI3QHp276-IUE",
+        authDomain: "res-q-ride-authotp.firebaseapp.com",
+        projectId: "res-q-ride-authotp",
+        storageBucket: "res-q-ride-authotp.firebasestorage.app",
+        messagingSenderId: "753835798073",
+        appId: "1:753835798073:web:c23ae906cb3a1b102127e8",
+        measurementId: "G-854RP84QEM",
+      });
+
+      const auth = getAuth(app);
+
+      window.sendOTP = async () => {
+        try {
+          window.recaptchaVerifier = new RecaptchaVerifier(
+            auth,
+            "recaptcha-container",
+            { size: "normal" }, // shows the "I'm not a robot" checkbox
+          );
+          const phone = document.getElementById("phone").value;
+          window.confirmationResult = await signInWithPhoneNumber(
+            auth,
+            phone,
+            window.recaptchaVerifier,
+          );
+          alert("OTP sent to " + phone);
+        } catch (err) {
+          alert("Error: " + err.message);
+        }
+      };
+
+      window.verifyOTP = async () => {
+        try {
+          const otp = document.getElementById("otp").value;
+          const result = await window.confirmationResult.confirm(otp);
+          const token = await result.user.getIdToken();
+          document.getElementById("token").value = token;
+          console.log("idToken:", token);
+        } catch (err) {
+          alert("Wrong OTP: " + err.message);
+        }
+      };
+    </script>
+  </body>
+</html>

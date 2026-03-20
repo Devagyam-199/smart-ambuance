@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
+    role:{
+      type:String,
+      enum:["Admin","Driver","User"],
+    },
     phoneNumber: {
       type: String,
       required: true,
@@ -26,11 +30,6 @@ const userSchema = new mongoose.Schema(
     lastLoginAt:{
       type:Date,
     },
-    firebaseUid:{
-      type:String,
-      unique:true,
-      sparse:true,
-    }
   },
   { timestamps: true },
 );
