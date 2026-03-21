@@ -1,30 +1,48 @@
-import { v2 as storage } from "cloudinary";
-import fs from "fs";
-import apiError from "../Utils/apiError.utils";
+import { v2 as cloudinary } from "cloudinary";
+import apiError from "../Utils/apiError.utils.js";
 
-storage.config({
-  cloud_name: process.env.Cloudinary_Cloud_Name,
-  api_key: process.env.Cloudinary_Api_Key,
-  api_secret: process.env.Cloudinary_Api_Secret,
-});
+/**
+ *
+ * @param {Buffer} fileBuffer
+ * @param {Object} [options]
+ * @returns {Promise<Object>}
+ */
 
-const uploadFileCloudinary = async (localFilePath) => {
+const uploadToCloudinary = async (fileBuffer, options = {}) => {
   try {
-    if (!localFilePath) {
-      throw new apiError(
-        400,
-        "No file found with this path. Source:(cloudinary.servies)",
-      );
+    if (!fileBuffer || !Buffer.isBuffer(filebuffer)) {
+      throw new apiError(400, "No valid file buffer provided");
     }
-    const fileStore = await storage.uploader.upload(localFilePath, {
+
+    const cloudinaryOptions = {
+      folder: "resqride-app",
       resource_type: "auto",
+      overwrite: true,
+      ...options,
+    };
+
+    const result = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        cloudinaryOptions,
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result);
+        },
+      );
+      stream.end(fileBuffer);
     });
-    console.log("File uploaded successfully on cloudinary");
-    return fileStore;
+
+    return {
+      public_id: result.public_id,
+      secure_url: result.secure_url,
+      format: result.format,
+      bytes: result.bytes,
+    };
   } catch (error) {
-    fs.unlinkSync(localFilePath);
-    throw new apiError(500, "error while uploading file to cloudinary");
+    console.error("Cloudinary upload error:", error);
+    throw new ApiError(
+      error.http_code || 500,
+      error.message || "Failed to upload file to Cloudinary",
+    );
   }
 };
-
-export default uploadFileCloudinary;
